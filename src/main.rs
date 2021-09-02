@@ -9,11 +9,19 @@ use std::time::Duration;
 
 const WIDTH: u32 = 800;
 const HEIGHT: u32 = 600;
+const SPEED: u32 = 10;
 
 enum Col {
     Black,
     White,
     Grey,
+}
+
+enum Direction {
+    Up,
+    Down,
+    Left,
+    Right,
 }
 
 pub fn main() {
@@ -35,15 +43,14 @@ pub fn main() {
 
     let mut event_pump = sdl_context.event_pump().unwrap();
 
-    let speed = 40;
+    let mut speed = 0;
     let mut x = 0;
     let mut y = 0;
+    let mut direction = Direction::Up;
 
     'running: loop {
         canvas.set_draw_color(Color::RGB(0, 0, 0));
         canvas.clear();
-
-        draw_rectangle(&mut canvas, x, y, 40, 40, Col::White);
 
         for event in event_pump.poll_iter() {
             match event {
@@ -57,22 +64,62 @@ pub fn main() {
                 Event::KeyDown {
                     keycode: Some(Keycode::Left),
                     ..
-                } => x -= speed,
+                } => {
+                    direction = Direction::Left;
+                    speed = SPEED;
+                }
                 Event::KeyDown {
                     keycode: Some(Keycode::Right),
                     ..
-                } => x += speed,
+                } => {
+                    direction = Direction::Right;
+                    speed = SPEED;
+                }
                 Event::KeyDown {
                     keycode: Some(Keycode::Up),
                     ..
-                } => y += speed,
+                } => {
+                    direction = Direction::Up;
+                    speed = SPEED;
+                }
                 Event::KeyDown {
                     keycode: Some(Keycode::Down),
                     ..
-                } => y -= speed,
+                } => {
+                    direction = Direction::Down;
+                    speed = SPEED;
+                }
+                Event::KeyUp {
+                    keycode: Some(Keycode::Left),
+                    ..
+                }
+                | Event::KeyUp {
+                    keycode: Some(Keycode::Right),
+                    ..
+                }
+                | Event::KeyUp {
+                    keycode: Some(Keycode::Up),
+                    ..
+                }
+                | Event::KeyUp {
+                    keycode: Some(Keycode::Down),
+                    ..
+                } => {
+                    speed = 0;
+                }
+
                 _ => {}
             }
         }
+
+        match direction {
+            Direction::Up => y += speed,
+            Direction::Down => y -= speed,
+            Direction::Left => x -= speed,
+            Direction::Right => x += speed,
+        }
+
+        draw_rectangle(&mut canvas, x, y, 40, 40, Col::White);
 
         canvas.present();
         ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));
