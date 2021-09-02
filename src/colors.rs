@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 use sdl2::pixels::Color;
 
 pub fn white() -> Color {
