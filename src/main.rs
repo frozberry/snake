@@ -7,6 +7,8 @@ use sdl2::rect::Rect;
 use sdl2::render::WindowCanvas;
 use std::time::Duration;
 
+mod colors;
+
 const WIDTH: u32 = 800;
 const HEIGHT: u32 = 600;
 const SPEED: u32 = 10;
@@ -18,26 +20,7 @@ enum Direction {
     Right,
 }
 
-#[derive(Clone, Copy, Debug)]
-struct Col {
-    r: u8,
-    g: u8,
-    b: u8,
-}
-
 pub fn main() {
-    let white = Col {
-        r: 255,
-        g: 255,
-        b: 255,
-    };
-    let grey = Col {
-        r: 150,
-        g: 150,
-        b: 150,
-    };
-    let black = Col { r: 0, g: 0, b: 0 };
-
     let sdl_context = sdl2::init().unwrap();
     let video_subsystem = sdl_context.video().unwrap();
 
@@ -49,7 +32,7 @@ pub fn main() {
 
     let mut canvas = window.into_canvas().build().unwrap();
 
-    canvas.set_draw_color(Color::RGB(0, 0, 0));
+    canvas.set_draw_color(colors::black());
     canvas.clear();
 
     canvas.present();
@@ -62,7 +45,7 @@ pub fn main() {
     let mut direction = Direction::Up;
 
     'running: loop {
-        canvas.set_draw_color(Color::RGB(0, 0, 0));
+        canvas.set_draw_color(colors::black());
         canvas.clear();
 
         for event in event_pump.poll_iter() {
@@ -132,15 +115,22 @@ pub fn main() {
             Direction::Right => x += speed,
         }
 
-        draw_rectangle(&mut canvas, x, y, 40, 40, white);
+        draw_rectangle(&mut canvas, x, y, 40, 40, colors::grey());
 
         canvas.present();
         ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));
     }
 }
 
-fn draw_rectangle(canvas: &mut WindowCanvas, x: u32, y: u32, width: u32, height: u32, color: Col) {
-    canvas.set_draw_color(Color::RGB(color.r, color.g, color.b));
+fn draw_rectangle(
+    canvas: &mut WindowCanvas,
+    x: u32,
+    y: u32,
+    width: u32,
+    height: u32,
+    color: Color,
+) {
+    canvas.set_draw_color(color);
     canvas.fill_rect(rect(x, y, width, height)).unwrap();
 }
 
