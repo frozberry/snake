@@ -11,12 +11,6 @@ const WIDTH: u32 = 800;
 const HEIGHT: u32 = 600;
 const SPEED: u32 = 10;
 
-enum Col {
-    Black,
-    White,
-    Grey,
-}
-
 enum Direction {
     Up,
     Down,
@@ -24,7 +18,26 @@ enum Direction {
     Right,
 }
 
+#[derive(Clone, Copy, Debug)]
+struct Col {
+    r: u8,
+    g: u8,
+    b: u8,
+}
+
 pub fn main() {
+    let white = Col {
+        r: 255,
+        g: 255,
+        b: 255,
+    };
+    let grey = Col {
+        r: 150,
+        g: 150,
+        b: 150,
+    };
+    let black = Col { r: 0, g: 0, b: 0 };
+
     let sdl_context = sdl2::init().unwrap();
     let video_subsystem = sdl_context.video().unwrap();
 
@@ -119,7 +132,7 @@ pub fn main() {
             Direction::Right => x += speed,
         }
 
-        draw_rectangle(&mut canvas, x, y, 40, 40, Col::White);
+        draw_rectangle(&mut canvas, x, y, 40, 40, white);
 
         canvas.present();
         ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));
@@ -127,7 +140,7 @@ pub fn main() {
 }
 
 fn draw_rectangle(canvas: &mut WindowCanvas, x: u32, y: u32, width: u32, height: u32, color: Col) {
-    canvas.set_draw_color(Color::RGB(rgb(&color).0, rgb(&color).1, rgb(&color).2));
+    canvas.set_draw_color(Color::RGB(color.r, color.g, color.b));
     canvas.fill_rect(rect(x, y, width, height)).unwrap();
 }
 
@@ -137,12 +150,4 @@ fn rect(x: u32, y: u32, width: u32, height: u32) -> Rect {
 
 fn square(x: u32, y: u32, size: u32) -> Rect {
     Rect::new(x as i32, (HEIGHT - y - size) as i32, size, size)
-}
-
-fn rgb(color: &Col) -> (u8, u8, u8) {
-    match color {
-        Col::White => (255, 255, 255),
-        Col::Black => (0, 0, 0),
-        Col::Grey => (150, 150, 150),
-    }
 }
