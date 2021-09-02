@@ -34,16 +34,16 @@ pub fn main() {
     canvas.present();
 
     let mut event_pump = sdl_context.event_pump().unwrap();
-    let mut i = 0;
+
+    let speed = 40;
+    let mut x = 0;
+    let mut y = 0;
+
     'running: loop {
-        i += 1;
         canvas.set_draw_color(Color::RGB(0, 0, 0));
         canvas.clear();
 
-        // canvas.set_draw_color(Color::RGB(200, 200, 200));
-        // canvas.fill_rect(square(300, 100, 80)).unwrap();
-        // canvas.fill_rect(square(300, 150, 40)).unwrap();
-        draw_rectangle(&mut canvas, 300, 300, 20, 80, Col::White);
+        draw_rectangle(&mut canvas, x, y, 40, 40, Col::White);
 
         for event in event_pump.poll_iter() {
             match event {
@@ -51,7 +51,25 @@ pub fn main() {
                 | Event::KeyDown {
                     keycode: Some(Keycode::Escape),
                     ..
-                } => break 'running,
+                } => {
+                    break 'running;
+                }
+                Event::KeyDown {
+                    keycode: Some(Keycode::Left),
+                    ..
+                } => x -= speed,
+                Event::KeyDown {
+                    keycode: Some(Keycode::Right),
+                    ..
+                } => x += speed,
+                Event::KeyDown {
+                    keycode: Some(Keycode::Up),
+                    ..
+                } => y += speed,
+                Event::KeyDown {
+                    keycode: Some(Keycode::Down),
+                    ..
+                } => y -= speed,
                 _ => {}
             }
         }
