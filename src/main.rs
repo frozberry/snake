@@ -115,7 +115,7 @@ pub fn main() {
             Direction::Right => x += speed,
         }
 
-        draw_rectangle(&mut canvas, x, y, 40, 40, colors::grey());
+        draw_rectangle(&mut canvas, x, y, 40, 40, colors::red());
 
         canvas.present();
         ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));

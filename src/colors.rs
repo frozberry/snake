@@ -11,3 +11,15 @@ pub fn black() -> Color {
 pub fn grey() -> Color {
     Color::RGB(150, 150, 150)
 }
+
+pub fn blue() -> Color {
+    Color::RGB(255, 0, 0)
+}
+
+pub fn green() -> Color {
+    Color::RGB(0, 255, 0)
+}
+
+pub fn red() -> Color {
+    Color::RGB(255, 0, 0)
+}
