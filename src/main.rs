@@ -45,11 +45,14 @@ pub fn main() {
     let mut event_pump = sdl_context.event_pump().unwrap();
 
     let mut frame = 0;
-    let mut delay = 2;
+    let mut delay = 4;
     let mut direction = Direction::Up;
 
     let mut snake: (u32, u32) = (10, 10);
     let mut tail: Vec<(u32, u32)> = vec![(11, 10), (12, 10), (13, 10), (14, 10)];
+
+    let mut rng = rand::thread_rng();
+    let mut fruit = (rng.gen_range(0..GRID_WIDTH), rng.gen_range(0..GRID_HEIGHT));
 
     'running: loop {
         frame += 1;
@@ -63,6 +66,10 @@ pub fn main() {
                 Direction::Down => snake.1 -= 1,
                 Direction::Left => snake.0 -= 1,
                 Direction::Right => snake.0 += 1,
+            }
+            if snake == fruit {
+                tail.insert(0, (snake.0, snake.1));
+                fruit = (rng.gen_range(0..GRID_WIDTH), rng.gen_range(0..GRID_HEIGHT));
             }
 
             let old_tail = tail.clone();
@@ -115,6 +122,7 @@ pub fn main() {
         for i in &tail {
             draw_grid_square(i.0, i.1, colors::white(), &mut canvas);
         }
+        draw_grid_square(fruit.0, fruit.1, colors::white(), &mut canvas);
 
         canvas.present();
         ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));
