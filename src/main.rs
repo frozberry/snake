@@ -4,7 +4,6 @@ mod colors;
 mod helpers;
 
 use helpers::*;
-use rand::Rng;
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
 use std::time::Duration;
@@ -42,7 +41,7 @@ impl Snake {
         }
     }
 
-    fn move_tick(&mut self, fruit: bool) {
+    fn tick(&mut self, fruit: bool) {
         let old_snake = self.head.clone();
         let old_tail = self.tail.clone();
 
@@ -92,8 +91,7 @@ pub fn main() {
     let mut event_pump = sdl_context.event_pump().unwrap();
 
     let mut frame = 0;
-    let mut delay = 4;
-    let mut direction = Direction::Up;
+    let delay = 4;
 
     let mut snake = Snake::new();
 
@@ -107,17 +105,11 @@ pub fn main() {
 
         if frame % delay == 0 {
             if snake.head == fruit {
-                snake.move_tick(true);
+                snake.tick(true);
                 fruit = new_fruit();
             } else {
-                snake.move_tick(false);
+                snake.tick(false);
             }
-
-            // if tail.contains(&snake) || !valid_coord(snake.0, snake.1) {
-            //     snake = (10, 10);
-            //     tail = vec![(11, 10), (12, 10), (13, 10), (14, 10)];
-            //     direction = Direction::Up;
-            // }
         }
 
         for event in event_pump.poll_iter() {
