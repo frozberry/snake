@@ -60,6 +60,12 @@ impl Snake {
         for i in 1..self.tail.len() {
             self.tail[i] = old_tail[i - 1];
         }
+
+        if self.tail.contains(&self.head) || !valid_coord(self.head.0, self.head.1) {
+            self.head = (10, 10);
+            self.tail = vec![(11, 10), (12, 10), (13, 10), (14, 10)];
+            self.direction = Direction::Up;
+        }
     }
 
     fn set_Direction(&mut self, direction: Direction) {
@@ -87,6 +93,7 @@ pub fn main() {
 
     let mut frame = 0;
     let mut delay = 4;
+    let mut direction = Direction::Up;
 
     let mut snake = Snake::new();
 
