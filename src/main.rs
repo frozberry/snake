@@ -4,6 +4,7 @@ mod colors;
 mod helpers;
 
 use helpers::*;
+use rand::Rng;
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
 use std::time::Duration;
@@ -43,10 +44,33 @@ pub fn main() {
     let mut y = 0;
     let mut direction = Direction::Up;
 
+    let mut board = [false; 16];
+    for i in 0..16 {
+        let mut rng = rand::thread_rng();
+        board[i] = if rng.gen_range(0..2) == 0 {
+            false
+        } else {
+            true
+        }
+    }
+
+    for i in 0..16 {
+        let x = index_to_xy(i).0;
+        let y = index_to_xy(i).1;
+        draw_grid_square(x, y, colors::white(), &mut canvas);
+    }
+
     'running: loop {
         canvas.set_draw_color(colors::black());
         canvas.clear();
 
+        for i in 0..16 {
+            let x = index_to_xy(i).0;
+            let y = index_to_xy(i).1;
+            if board[i] {
+                draw_grid_square(x, y, colors::white(), &mut canvas);
+            }
+        }
         for event in event_pump.poll_iter() {
             match event {
                 Event::Quit { .. }
