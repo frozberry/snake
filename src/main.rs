@@ -42,7 +42,7 @@ impl Snake {
         }
     }
 
-    fn move_tick(&mut self, fruit: (i32, i32)) {
+    fn move_tick(&mut self, fruit: bool) {
         let old_snake = self.head.clone();
         let old_tail = self.tail.clone();
 
@@ -52,13 +52,8 @@ impl Snake {
             Direction::Left => self.head.0 -= 1,
             Direction::Right => self.head.0 += 1,
         }
-        // let mut rng = rand::thread_rng();
-        if self.head == fruit {
+        if fruit {
             self.tail.insert(0, (self.head.0, self.head.1));
-            // fruit = (
-            //     rng.gen_range(0..GRID_WIDTH) as i32,
-            //     rng.gen_range(0..GRID_HEIGHT) as i32,
-            // );
         }
 
         self.tail[0] = old_snake;
@@ -109,7 +104,12 @@ pub fn main() {
         draw_grid_outline(&mut canvas);
 
         if frame % delay == 0 {
-            snake.move_tick(fruit);
+            if snake.head == fruit {
+                snake.move_tick(true);
+
+            } else {
+                snake.move_tick(false);
+            }
 
             // if tail.contains(&snake) || !valid_coord(snake.0, snake.1) {
             //     snake = (10, 10);
