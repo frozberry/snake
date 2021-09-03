@@ -44,24 +44,33 @@ pub fn main() {
 
     let mut event_pump = sdl_context.event_pump().unwrap();
 
-    let mut speed = 0;
-    let mut x = 0;
-    let mut y = 0;
+    let mut frame = 0;
+    let mut delay = 2;
     let mut direction = Direction::Up;
 
     let mut snake: (u32, u32) = (10, 10);
     let mut tail: Vec<(u32, u32)> = vec![(11, 10), (12, 10), (13, 10), (14, 10)];
 
     'running: loop {
+        frame += 1;
         canvas.set_draw_color(colors::black());
         canvas.clear();
         draw_grid_outline(&mut canvas);
 
-        match direction {
-            Direction::Up => y += speed,
-            Direction::Down => y -= speed,
-            Direction::Left => x -= speed,
-            Direction::Right => x += speed,
+        if frame % delay == 0 {
+            match direction {
+                Direction::Up => snake.1 += 1,
+                Direction::Down => snake.1 -= 1,
+                Direction::Left => snake.0 -= 1,
+                Direction::Right => snake.0 += 1,
+            }
+
+            let old_tail = tail.clone();
+
+            tail[0] = snake;
+            for i in 1..tail.len() {
+                tail[i] = old_tail[i - 1];
+            }
         }
 
         for event in event_pump.poll_iter() {
@@ -78,57 +87,28 @@ pub fn main() {
                     ..
                 } => {
                     direction = Direction::Left;
-                    speed = SPEED;
                 }
                 Event::KeyDown {
                     keycode: Some(Keycode::Right),
                     ..
                 } => {
                     direction = Direction::Right;
-                    speed = SPEED;
                 }
                 Event::KeyDown {
                     keycode: Some(Keycode::Up),
                     ..
                 } => {
                     direction = Direction::Up;
-                    speed = SPEED;
                 }
                 Event::KeyDown {
                     keycode: Some(Keycode::Down),
                     ..
                 } => {
                     direction = Direction::Down;
-                    speed = SPEED;
-                }
-                Event::KeyUp {
-                    keycode: Some(Keycode::Left),
-                    ..
-                }
-                | Event::KeyUp {
-                    keycode: Some(Keycode::Right),
-                    ..
-                }
-                | Event::KeyUp {
-                    keycode: Some(Keycode::Up),
-                    ..
-                }
-                | Event::KeyUp {
-                    keycode: Some(Keycode::Down),
-                    ..
-                } => {
-                    speed = 0;
                 }
 
                 _ => {}
             }
-        }
-
-        match direction {
-            Direction::Up => y += speed,
-            Direction::Down => y -= speed,
-            Direction::Left => x -= speed,
-            Direction::Right => x += speed,
         }
 
         draw_grid_square(snake.0, snake.1, colors::white(), &mut canvas);
