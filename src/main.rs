@@ -59,6 +59,9 @@ pub fn main() {
             }
         }
 
+        snake.draw(&mut canvas);
+        draw_grid_square(fruit.0, fruit.1, colors::green(), &mut canvas);
+
         for event in event_pump.poll_iter() {
             match event {
                 Event::Quit { .. }
@@ -96,12 +99,6 @@ pub fn main() {
                 _ => {}
             }
         }
-
-        draw_grid_square(snake.head.0, snake.head.1, colors::blue(), &mut canvas);
-        for i in &snake.tail {
-            draw_grid_square(i.0, i.1, colors::white(), &mut canvas);
-        }
-        draw_grid_square(fruit.0, fruit.1, colors::green(), &mut canvas);
 
         canvas.present();
         ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));

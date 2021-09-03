@@ -14,9 +14,6 @@ pub fn new_fruit() -> (i32, i32) {
     fruit
 }
 
-pub fn valid_coord(x: i32, y: i32) -> bool {
-    x >= 0 && y >= 0 && x < crate::GRID_WIDTH as i32 && y < crate::GRID_HEIGHT as i32
-}
 
 pub fn draw_rectangle(
     canvas: &mut WindowCanvas,
