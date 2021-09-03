@@ -13,6 +13,12 @@ const WIDTH: u32 = 800;
 const HEIGHT: u32 = 600;
 const SPEED: u32 = 10;
 
+const GRID_SIZE: u32 = 5;
+const GRID_XO: u32 = 300;
+const GRID_YO: u32 = 100;
+const GRID_HEIGHT: u32 = 50;
+const GRID_WIDTH: u32 = 50;
+
 enum Direction {
     Up,
     Down,
@@ -44,33 +50,30 @@ pub fn main() {
     let mut y = 0;
     let mut direction = Direction::Up;
 
-    let mut board = [false; 16];
-    for i in 0..16 {
+    let mut board = [false; (GRID_WIDTH * GRID_HEIGHT) as usize];
+
+    for i in 0..(GRID_WIDTH * GRID_HEIGHT) as usize {
         let mut rng = rand::thread_rng();
+
         board[i] = if rng.gen_range(0..2) == 0 {
             false
         } else {
             true
-        }
-    }
-
-    for i in 0..16 {
-        let x = index_to_xy(i).0;
-        let y = index_to_xy(i).1;
-        draw_grid_square(x, y, colors::white(), &mut canvas);
+        };
     }
 
     'running: loop {
         canvas.set_draw_color(colors::black());
         canvas.clear();
 
-        for i in 0..16 {
-            let x = index_to_xy(i).0;
-            let y = index_to_xy(i).1;
-            if board[i] {
+        for (i, on) in board.iter().enumerate() {
+            let x = index_to_xy(i as u32).0;
+            let y = index_to_xy(i as u32).1;
+            if *on {
                 draw_grid_square(x, y, colors::white(), &mut canvas);
             }
         }
+
         for event in event_pump.poll_iter() {
             match event {
                 Event::Quit { .. }
@@ -79,6 +82,20 @@ pub fn main() {
                     ..
                 } => {
                     break 'running;
+                }
+                Event::KeyDown {
+                    keycode: Some(Keycode::M),
+                    ..
+                } => {
+                    for i in 0..(GRID_WIDTH * GRID_HEIGHT) as usize {
+                        let mut rng = rand::thread_rng();
+
+                        board[i] = if rng.gen_range(0..2) == 0 {
+                            false
+                        } else {
+                            true
+                        };
+                    }
                 }
                 Event::KeyDown {
                     keycode: Some(Keycode::Left),

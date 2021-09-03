@@ -15,24 +15,20 @@ pub fn draw_rectangle(
     canvas.fill_rect(rect(x, y, width, height)).unwrap();
 }
 
-const GRID_SIZE: u32 = 16;
-const GRID_XO: u32 = 300;
-const GRID_YO: u32 = 300;
-
 pub fn draw_grid_square(x: u32, y: u32, color: Color, canvas: &mut WindowCanvas) {
-    let square_xo = GRID_XO + x * GRID_SIZE;
-    let square_yo = GRID_YO + y * GRID_SIZE;
+    let square_xo = crate::GRID_XO + x * crate::GRID_SIZE;
+    let square_yo = crate::GRID_YO + y * crate::GRID_SIZE;
 
-    let square = square(square_xo, square_yo, GRID_SIZE);
+    let square = square(square_xo, square_yo, crate::GRID_SIZE);
 
     canvas.set_draw_color(color);
     canvas.fill_rect(square).unwrap();
 }
 
-pub fn index_to_xy(index: usize) -> (u32, u32) {
-    let x = index % 4;
-    let y = index / 4;
-    (x as u32, y as u32)
+pub fn index_to_xy(index: u32) -> (u32, u32) {
+    let x = index % crate::GRID_HEIGHT;
+    let y = index / crate::GRID_WIDTH;
+    (x, y)
 }
 
 fn rect(x: u32, y: u32, width: u32, height: u32) -> Rect {
