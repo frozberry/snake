@@ -68,7 +68,7 @@ impl Snake {
         }
     }
 
-    fn set_Direction(&mut self, direction: Direction) {
+    fn set_direction(&mut self, direction: Direction) {
         self.direction = direction;
     }
 }
@@ -133,25 +133,25 @@ pub fn main() {
                     keycode: Some(Keycode::Left),
                     ..
                 } => {
-                    snake.set_Direction(Direction::Left);
+                    snake.set_direction(Direction::Left);
                 }
                 Event::KeyDown {
                     keycode: Some(Keycode::Right),
                     ..
                 } => {
-                    snake.set_Direction(Direction::Right);
+                    snake.set_direction(Direction::Right);
                 }
                 Event::KeyDown {
                     keycode: Some(Keycode::Up),
                     ..
                 } => {
-                    snake.set_Direction(Direction::Up);
+                    snake.set_direction(Direction::Up);
                 }
                 Event::KeyDown {
                     keycode: Some(Keycode::Down),
                     ..
                 } => {
-                    snake.set_Direction(Direction::Down);
+                    snake.set_direction(Direction::Down);
                 }
 
                 _ => {}
