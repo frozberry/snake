@@ -49,28 +49,19 @@ pub fn main() {
     let mut y = 0;
     let mut direction = Direction::Up;
 
-    let mut board = [false; (GRID_WIDTH * GRID_HEIGHT) as usize];
-
-    for i in 0..(GRID_WIDTH * GRID_HEIGHT) as usize {
-        let mut rng = rand::thread_rng();
-
-        board[i] = if rng.gen_range(0..2) == 0 {
-            false
-        } else {
-            true
-        };
-    }
+    let mut snake: (u32, u32) = (10, 10);
+    let mut tail: Vec<(u32, u32)> = vec![(11, 10), (12, 10), (13, 10), (14, 10)];
 
     'running: loop {
         canvas.set_draw_color(colors::black());
         canvas.clear();
+        draw_grid_outline(&mut canvas);
 
-        for (i, on) in board.iter().enumerate() {
-            let x = index_to_xy(i as u32).0;
-            let y = index_to_xy(i as u32).1;
-            if *on {
-                draw_grid_square(x, y, colors::white(), &mut canvas);
-            }
+        match direction {
+            Direction::Up => y += speed,
+            Direction::Down => y -= speed,
+            Direction::Left => x -= speed,
+            Direction::Right => x += speed,
         }
 
         for event in event_pump.poll_iter() {
@@ -81,20 +72,6 @@ pub fn main() {
                     ..
                 } => {
                     break 'running;
-                }
-                Event::KeyDown {
-                    keycode: Some(Keycode::M),
-                    ..
-                } => {
-                    for i in 0..(GRID_WIDTH * GRID_HEIGHT) as usize {
-                        let mut rng = rand::thread_rng();
-
-                        board[i] = if rng.gen_range(0..2) == 0 {
-                            false
-                        } else {
-                            true
-                        };
-                    }
                 }
                 Event::KeyDown {
                     keycode: Some(Keycode::Left),
@@ -154,7 +131,10 @@ pub fn main() {
             Direction::Right => x += speed,
         }
 
-        draw_rectangle(&mut canvas, x, y, 40, 40, colors::red());
+        draw_grid_square(snake.0, snake.1, colors::white(), &mut canvas);
+        for i in &tail {
+            draw_grid_square(i.0, i.1, colors::white(), &mut canvas);
+        }
 
         canvas.present();
         ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));
