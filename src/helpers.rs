@@ -14,19 +14,6 @@ pub fn new_fruit() -> (i32, i32) {
     fruit
 }
 
-
-pub fn draw_rectangle(
-    canvas: &mut WindowCanvas,
-    x: i32,
-    y: i32,
-    width: i32,
-    height: i32,
-    color: Color,
-) {
-    canvas.set_draw_color(color);
-    canvas.fill_rect(rect(x, y, width, height)).unwrap();
-}
-
 pub fn draw_grid_square(x: i32, y: i32, color: Color, canvas: &mut WindowCanvas) {
     let square_xo = crate::GRID_XO + x * crate::GRID_SIZE;
     let square_yo = crate::GRID_YO + y * crate::GRID_SIZE;
@@ -35,24 +22,6 @@ pub fn draw_grid_square(x: i32, y: i32, color: Color, canvas: &mut WindowCanvas)
 
     canvas.set_draw_color(color);
     canvas.fill_rect(square).unwrap();
-}
-
-pub fn draw_grid_square_index(index: i32, color: Color, canvas: &mut WindowCanvas) {
-    let x = index_to_xy(index).0;
-    let y = index_to_xy(index).1;
-    let square_xo = crate::GRID_XO + x * crate::GRID_SIZE;
-    let square_yo = crate::GRID_YO + y * crate::GRID_SIZE;
-
-    let square = square(square_xo, square_yo, crate::GRID_SIZE - 2);
-
-    canvas.set_draw_color(color);
-    canvas.fill_rect(square).unwrap();
-}
-
-pub fn index_to_xy(index: i32) -> (i32, i32) {
-    let x = index % crate::GRID_HEIGHT;
-    let y = index / crate::GRID_WIDTH;
-    (x, y)
 }
 
 pub fn draw_grid_outline(canvas: &mut WindowCanvas) {
@@ -64,6 +33,24 @@ pub fn draw_grid_outline(canvas: &mut WindowCanvas) {
     );
     canvas.set_draw_color(colors::white());
     canvas.draw_rect(grid).unwrap();
+}
+
+fn index_to_xy(index: i32) -> (i32, i32) {
+    let x = index % crate::GRID_HEIGHT;
+    let y = index / crate::GRID_WIDTH;
+    (x, y)
+}
+
+fn draw_rectangle(
+    canvas: &mut WindowCanvas,
+    x: i32,
+    y: i32,
+    width: i32,
+    height: i32,
+    color: Color,
+) {
+    canvas.set_draw_color(color);
+    canvas.fill_rect(rect(x, y, width, height)).unwrap();
 }
 
 fn rect(x: i32, y: i32, width: i32, height: i32) -> Rect {
