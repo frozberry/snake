@@ -19,7 +19,7 @@ pub fn draw_grid_square(x: u32, y: u32, color: Color, canvas: &mut WindowCanvas)
     let square_xo = crate::GRID_XO + x * crate::GRID_SIZE;
     let square_yo = crate::GRID_YO + y * crate::GRID_SIZE;
 
-    let square = square(square_xo, square_yo, crate::GRID_SIZE);
+    let square = square(square_xo, square_yo, crate::GRID_SIZE - 2);
 
     canvas.set_draw_color(color);
     canvas.fill_rect(square).unwrap();
