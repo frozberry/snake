@@ -13,9 +13,9 @@ const WIDTH: u32 = 800;
 const HEIGHT: u32 = 600;
 const SPEED: u32 = 10;
 
-const GRID_SIZE: u32 = 20;
-const GRID_HEIGHT: u32 = 10;
-const GRID_WIDTH: u32 = 10;
+const GRID_SIZE: u32 = 10;
+const GRID_HEIGHT: u32 = 40;
+const GRID_WIDTH: u32 = 40;
 const GRID_XO: u32 = (WIDTH / 2) - (GRID_WIDTH * GRID_SIZE / 2);
 const GRID_YO: u32 = (HEIGHT / 2) - (GRID_HEIGHT * GRID_SIZE / 2);
 
@@ -40,7 +40,6 @@ pub fn main() {
 
     canvas.set_draw_color(colors::black());
     canvas.clear();
-
     canvas.present();
 
     let mut event_pump = sdl_context.event_pump().unwrap();
