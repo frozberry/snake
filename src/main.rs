@@ -9,15 +9,14 @@ use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
 use std::time::Duration;
 
-const WIDTH: u32 = 800;
-const HEIGHT: u32 = 600;
-const SPEED: u32 = 10;
+const WIDTH: i32 = 800;
+const HEIGHT: i32 = 600;
 
-const GRID_SIZE: u32 = 10;
-const GRID_HEIGHT: u32 = 40;
-const GRID_WIDTH: u32 = 40;
-const GRID_XO: u32 = (WIDTH / 2) - (GRID_WIDTH * GRID_SIZE / 2);
-const GRID_YO: u32 = (HEIGHT / 2) - (GRID_HEIGHT * GRID_SIZE / 2);
+const GRID_SIZE: i32 = 10;
+const GRID_HEIGHT: i32 = 40;
+const GRID_WIDTH: i32 = 40;
+const GRID_XO: i32 = (WIDTH as i32 / 2) - (GRID_WIDTH * GRID_SIZE / 2);
+const GRID_YO: i32 = (HEIGHT as i32 / 2) - (GRID_HEIGHT * GRID_SIZE / 2);
 
 enum Direction {
     Up,
@@ -31,7 +30,7 @@ pub fn main() {
     let video_subsystem = sdl_context.video().unwrap();
 
     let window = video_subsystem
-        .window("rust-sdl2 demo", WIDTH, HEIGHT)
+        .window("rust-sdl2 demo", WIDTH as u32, HEIGHT as u32)
         .position_centered()
         .build()
         .unwrap();
@@ -48,12 +47,14 @@ pub fn main() {
     let mut delay = 4;
     let mut direction = Direction::Up;
 
-    let mut snake: (u32, u32) = (10, 10);
-    let mut tail: Vec<(u32, u32)> = vec![(11, 10), (12, 10), (13, 10), (14, 10)];
-    // let mut tail: Vec<(u32, u32)> = vec![(11, 10), (12, 10), (13, 10), (14, 10)];
+    let mut snake: (i32, i32) = (10, 10);
+    let mut tail: Vec<(i32, i32)> = vec![(11, 10), (12, 10), (13, 10), (14, 10)];
 
     let mut rng = rand::thread_rng();
-    let mut fruit = (rng.gen_range(0..GRID_WIDTH), rng.gen_range(0..GRID_HEIGHT));
+    let mut fruit = (
+        rng.gen_range(0..GRID_WIDTH) as i32,
+        rng.gen_range(0..GRID_HEIGHT) as i32,
+    );
 
     'running: loop {
         frame += 1;
@@ -73,7 +74,10 @@ pub fn main() {
             }
             if snake == fruit {
                 tail.insert(0, (snake.0, snake.1));
-                fruit = (rng.gen_range(0..GRID_WIDTH), rng.gen_range(0..GRID_HEIGHT));
+                fruit = (
+                    rng.gen_range(0..GRID_WIDTH) as i32,
+                    rng.gen_range(0..GRID_HEIGHT) as i32,
+                );
             }
 
             tail[0] = old_snake;
@@ -81,7 +85,7 @@ pub fn main() {
                 tail[i] = old_tail[i - 1];
             }
 
-            if tail.contains(&snake) {
+            if tail.contains(&snake) || !valid_coord(snake.0, snake.1) {
                 snake = (10, 10);
                 tail = vec![(11, 10), (12, 10), (13, 10), (14, 10)];
                 direction = Direction::Up;
