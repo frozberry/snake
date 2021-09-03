@@ -14,10 +14,10 @@ const HEIGHT: u32 = 600;
 const SPEED: u32 = 10;
 
 const GRID_SIZE: u32 = 5;
-const GRID_XO: u32 = 300;
-const GRID_YO: u32 = 100;
 const GRID_HEIGHT: u32 = 50;
 const GRID_WIDTH: u32 = 50;
+const GRID_XO: u32 = (WIDTH / 2) - (GRID_WIDTH * GRID_SIZE / 2);
+const GRID_YO: u32 = (HEIGHT / 2) - (GRID_HEIGHT * GRID_SIZE / 2);
 
 enum Direction {
     Up,
