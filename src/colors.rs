@@ -14,7 +14,7 @@ pub fn grey() -> Color {
 }
 
 pub fn blue() -> Color {
-    Color::RGB(255, 0, 0)
+    Color::RGB(0, 0, 255)
 }
 
 pub fn green() -> Color {

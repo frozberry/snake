@@ -50,6 +50,7 @@ pub fn main() {
 
     let mut snake: (u32, u32) = (10, 10);
     let mut tail: Vec<(u32, u32)> = vec![(11, 10), (12, 10), (13, 10), (14, 10)];
+    // let mut tail: Vec<(u32, u32)> = vec![(11, 10), (12, 10), (13, 10), (14, 10)];
 
     let mut rng = rand::thread_rng();
     let mut fruit = (rng.gen_range(0..GRID_WIDTH), rng.gen_range(0..GRID_HEIGHT));
@@ -61,6 +62,9 @@ pub fn main() {
         draw_grid_outline(&mut canvas);
 
         if frame % delay == 0 {
+            let old_snake = snake.clone();
+            let old_tail = tail.clone();
+
             match direction {
                 Direction::Up => snake.1 += 1,
                 Direction::Down => snake.1 -= 1,
@@ -72,11 +76,15 @@ pub fn main() {
                 fruit = (rng.gen_range(0..GRID_WIDTH), rng.gen_range(0..GRID_HEIGHT));
             }
 
-            let old_tail = tail.clone();
-
-            tail[0] = snake;
+            tail[0] = old_snake;
             for i in 1..tail.len() {
                 tail[i] = old_tail[i - 1];
+            }
+
+            if tail.contains(&snake) {
+                snake = (10, 10);
+                tail = vec![(11, 10), (12, 10), (13, 10), (14, 10)];
+                direction = Direction::Up;
             }
         }
 
@@ -118,11 +126,11 @@ pub fn main() {
             }
         }
 
-        draw_grid_square(snake.0, snake.1, colors::white(), &mut canvas);
+        draw_grid_square(snake.0, snake.1, colors::blue(), &mut canvas);
         for i in &tail {
             draw_grid_square(i.0, i.1, colors::white(), &mut canvas);
         }
-        draw_grid_square(fruit.0, fruit.1, colors::white(), &mut canvas);
+        draw_grid_square(fruit.0, fruit.1, colors::green(), &mut canvas);
 
         canvas.present();
         ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));
