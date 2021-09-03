@@ -2,7 +2,7 @@ use crate::colors;
 use crate::helpers::*;
 use sdl2::render::WindowCanvas;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum Direction {
     Up,
     Down,

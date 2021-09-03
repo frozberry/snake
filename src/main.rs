@@ -41,9 +41,7 @@ pub fn main() {
 
     let mut frame = 0;
     let delay = 4;
-
     let mut snake = Snake::new();
-
     let mut fruit = Fruit::new();
 
     'running: loop {
@@ -71,25 +69,33 @@ pub fn main() {
                     keycode: Some(Keycode::Left),
                     ..
                 } => {
-                    snake.set_direction(Direction::Left);
+                    if snake.direction != Direction::Right {
+                        snake.set_direction(Direction::Left);
+                    }
                 }
                 Event::KeyDown {
                     keycode: Some(Keycode::Right),
                     ..
                 } => {
-                    snake.set_direction(Direction::Right);
+                    if snake.direction != Direction::Left {
+                        snake.set_direction(Direction::Right);
+                    }
                 }
                 Event::KeyDown {
                     keycode: Some(Keycode::Up),
                     ..
                 } => {
-                    snake.set_direction(Direction::Up);
+                    if snake.direction != Direction::Down {
+                        snake.set_direction(Direction::Up);
+                    }
                 }
                 Event::KeyDown {
                     keycode: Some(Keycode::Down),
                     ..
                 } => {
-                    snake.set_direction(Direction::Down);
+                    if snake.direction != Direction::Up {
+                        snake.set_direction(Direction::Down);
+                    }
                 }
 
                 _ => {}
@@ -102,6 +108,7 @@ pub fn main() {
         snake.draw(&mut canvas);
         fruit.render(&mut canvas);
         canvas.present();
+
         ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));
     }
 }
