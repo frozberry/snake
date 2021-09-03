@@ -1,8 +1,18 @@
 #![allow(dead_code)]
 use crate::colors;
+use rand::Rng;
 use sdl2::pixels::Color;
 use sdl2::rect::Rect;
 use sdl2::render::WindowCanvas;
+
+pub fn new_fruit() -> (i32, i32) {
+    let mut rng = rand::thread_rng();
+    let fruit = (
+        rng.gen_range(0..crate::GRID_WIDTH) as i32,
+        rng.gen_range(0..crate::GRID_HEIGHT) as i32,
+    );
+    fruit
+}
 
 pub fn valid_coord(x: i32, y: i32) -> bool {
     x >= 0 && y >= 0 && x < crate::GRID_WIDTH as i32 && y < crate::GRID_HEIGHT as i32

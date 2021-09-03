@@ -87,15 +87,10 @@ pub fn main() {
 
     let mut frame = 0;
     let mut delay = 4;
-    let mut direction = Direction::Up;
 
     let mut snake = Snake::new();
 
-    let mut rng = rand::thread_rng();
-    let mut fruit = (
-        rng.gen_range(0..GRID_WIDTH) as i32,
-        rng.gen_range(0..GRID_HEIGHT) as i32,
-    );
+    let mut fruit = new_fruit();
 
     'running: loop {
         frame += 1;
@@ -106,7 +101,7 @@ pub fn main() {
         if frame % delay == 0 {
             if snake.head == fruit {
                 snake.move_tick(true);
-
+                fruit = new_fruit();
             } else {
                 snake.move_tick(false);
             }
